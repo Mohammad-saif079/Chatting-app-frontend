@@ -1,9 +1,10 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from "./pages/Home.jsx"
-import Login from "./pages/Login.jsx"
+
 import Signup from "./pages/Signup.jsx"
 import { Signupprovider } from './context/Signupcontext.jsx'
+import Chat from './pages/Chat.jsx'
 
 
 const App = () => {
@@ -11,7 +12,7 @@ const App = () => {
     <>
       <Routes>
         <Route path='/' element={<Signupprovider><Home /></Signupprovider>} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/chats' element={<Chat />} />
 
 
         <Route path='/signup' element={<Signupprovider><Signup /></Signupprovider>} />
