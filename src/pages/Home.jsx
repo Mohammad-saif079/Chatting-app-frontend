@@ -1,12 +1,59 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SignHead from '../components/SignHead'
 import Input from '../components/Input'
 import DotsIcon from '../components/DotsIcon'
 import { Usesign } from '../context/Signupcontext.jsx'
+import { gsap } from "gsap";
 
 const Home = () => {
-  const [loading, setLoading] = useState(false)
-  const {username, password, setusername, setpassword, err2, err3, seterr2, seterr3} = Usesign()
+  const [loading, setloading] = useState(false)
+  const { username, password, setusername, setpassword, err2, err3, seterr2, seterr3 } = Usesign()
+
+  const handleLogin = async () => {
+    if (!loading) {
+
+      let valid = true
+      //username
+      if (username.trim() === "") {
+        seterr2("*Required")
+        valid = false
+      } else {
+        seterr2("")
+      }
+      //password
+      if (password.trim() === "") {
+        seterr3("*Required")
+        valid = false;
+      } else {
+        if (password.length < 6) {
+          seterr3("*Password must be at least 6 characters");
+          valid = false;
+        } else {
+          seterr3("");
+        }
+      }
+      if (valid) {
+        setloading(true)
+        console.log("✅ Account login passed all checks!");
+
+        // You can call your API or next steps here
+      }
+    }else{}
+
+
+
+  }
+
+  useEffect(() => {
+    gsap.to(".loader", {
+      rotate: 360,
+      duration: 2,
+      repeat: -1,
+      ease: "linear"
+    })
+  }, [loading])
+
+
 
   return (
     <div className=' w-[100vw] h-[100svh] relative bg-[#0B0B0F]  flex items-center justify-center '>
@@ -19,7 +66,7 @@ const Home = () => {
           <Input title="Username*" placeholder="Username" error={err2} herovalue={username} setherovalue={setusername} />
           <Input title="Password*" placeholder="Password" error={err3} herovalue={password} setherovalue={setpassword} />
 
-          <button className=' sm:w-[580px] overflow-hidden flex justify-center items-center rounded-[10px] py-3 text-[18px] w-full bg-[#FFD700] text-[#0B0B0F] font-semibold ' >
+          <button onClick={handleLogin} className=' sm:w-[580px] overflow-hidden flex justify-center items-center rounded-[10px] py-3 text-[18px] w-full bg-[#FFD700] text-[#0B0B0F] font-semibold ' >
             {loading ? (
               <div className='loader' >
                 <DotsIcon />

@@ -1,19 +1,33 @@
 import React from 'react'
 import { useNavigate } from "react-router-dom"
+import { Usesign } from '../context/Signupcontext'
 
 const SignHead = (props) => {
-    
+    const { setfirstname, setlastname, setpassword, setusername,  setconfirmpass } = Usesign()
+    const { seterr1, seterr2, seterr3, seterr4 } = Usesign()
+
     const navigate = useNavigate()
-    
+
     const handlenav = async () => {
-        if (props.create){
+        setfirstname("");
+        setlastname("");
+        setusername("");
+        setpassword("");
+        setconfirmpass("");
+
+        seterr1("");
+        seterr2("");
+        seterr3("");
+        seterr4("");
+
+        if (props.create) {
             navigate("/signup")
         }
-        else{
+        else {
             navigate("/")
         }
     }
-    
+
 
     const logo = <svg xmlns="http://www.w3.org/2000/svg" width={props.size} viewBox="0 0 868 868" fill="none">
         <rect
