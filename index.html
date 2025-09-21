@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0B0B0F" />
+  <title>Vite + React</title>
+  <style>
+    /* hide scrollbar globally */
+    html,
+    body {
+      overflow: auto;
+      /* scrolling still works */
+      height: 100%;
+      /* full height */
+      -ms-overflow-style: none;
+      /* IE + Edge */
+      scrollbar-width: none;
+      /* Firefox */
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
+      /* Chrome, Safari */
+    }
+  </style>
+
+</head>
+
+<body class=" w-[100vw] h-[100svh] bg-[#0B0B0F] ">
+  <div id="root" class=" w-[100vw] h-[100svh] bg-[#0B0B0F] "></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
