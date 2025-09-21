@@ -1,6 +1,20 @@
 import React from 'react'
+import { useNavigate } from "react-router-dom"
 
 const SignHead = (props) => {
+    
+    const navigate = useNavigate()
+    
+    const handlenav = async () => {
+        if (props.create){
+            navigate("/signup")
+        }
+        else{
+            navigate("/")
+        }
+    }
+    
+
     const logo = <svg xmlns="http://www.w3.org/2000/svg" width={props.size} viewBox="0 0 868 868" fill="none">
         <rect
             x="40.1076"
@@ -36,13 +50,32 @@ const SignHead = (props) => {
         />
     </svg>
 
+    const create = <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="45"
+        height="45"
+        viewBox="0 0 47 47"
+        fill="none"
+    >
+        <path
+            d="M31.3333 37.2083H43.0833M37.2083 31.3333V43.0833M11.75 41.125V37.2083C11.75 35.1308 12.5753 33.1384 14.0443 31.6693C15.5134 30.2003 17.5058 29.375 19.5833 29.375H27.4167M15.6667 13.7083C15.6667 15.7859 16.492 17.7783 17.961 19.2473C19.43 20.7164 21.4225 21.5417 23.5 21.5417C25.5775 21.5417 27.57 20.7164 29.039 19.2473C30.508 17.7783 31.3333 15.7859 31.3333 13.7083C31.3333 11.6308 30.508 9.63836 29.039 8.16933C27.57 6.70029 25.5775 5.875 23.5 5.875C21.4225 5.875 19.43 6.70029 17.961 8.16933C16.492 9.63836 15.6667 11.6308 15.6667 13.7083Z"
+            stroke="white"
+            strokeWidth="3.91667"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+
     return (
         <div className=' justify-center flex items-center flex-col gap-1 ' >
             <div className='w-[90vw] flex justify-between items-center' >
                 {logo}
-                {back}
+                <button onClick={handlenav} >
+
+                    {props.create ? create : back}
+                </button>
             </div>
-            
+
         </div>
     )
 }
