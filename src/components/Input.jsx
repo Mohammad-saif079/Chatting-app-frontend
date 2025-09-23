@@ -1,9 +1,18 @@
-import React from 'react'
+import { useState } from 'react'
 
 import { Usesign } from "../context/Signupcontext"
+import Eye from './Eye'
+import CloseEye from './CloseEye'
 
 const Input = (props) => {
+
+    const [pass, setpass] = useState(true)
+
     const { firstname, lastname, setfirstname, setlastname } = Usesign()
+
+    const handlepassbox = ()=>{
+        {pass ? setpass(false):setpass(true)}
+    }
 
     const handlechange = (e) => {
         props.setherovalue(e.target.value)
@@ -17,8 +26,16 @@ const Input = (props) => {
 
     }
 
+    const password_input = (
+        <div className='flex  items-center relative ' >
+            <input type={pass ? "password" : "text"} value={props.herovalue} onChange={(e) => { handlechange(e) }} placeholder={props.placeholder} className=' w-full pl-4 py-3 text-white  box sm:w-[580px] bg-[#1F1F2B] text-[18px] outline-0 placeholder:text-[#A3A3A3] rounded-[10px] ' />
+            <button onClick={handlepassbox} className=' absolute sm:right-8 right-3 flex justify-center items-center ' >
+                {pass ? <CloseEye/> : <Eye />}
 
-    const normal = <input value={props.herovalue} onChange={(e) => { handlechange(e) }} placeholder={props.placeholder} className= ' w-full pl-4 py-3 text-white  box sm:w-[580px] bg-[#1F1F2B] text-[18px] outline-0 placeholder:text-[#A3A3A3] rounded-[10px] ' type="text" />
+            </button>
+        </div>
+    )
+    const normal = <input value={props.herovalue} onChange={(e) => { handlechange(e) }} placeholder={props.placeholder} className=' w-full pl-4 py-3 text-white  box sm:w-[580px] bg-[#1F1F2B] text-[18px] outline-0 placeholder:text-[#A3A3A3] rounded-[10px] ' type="text" />
 
     return (
         <div className=' flex-col flex justify-center gap-1 h-[120px] box-border ' >
@@ -31,7 +48,8 @@ const Input = (props) => {
 
                 </div>
 
-                : normal}
+                : props.ispassword ? password_input : normal}
+
 
             <h1 className=' text-[18px] h-[28px] text-[#FF0038] ' >{props.error}</h1>
 

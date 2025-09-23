@@ -112,8 +112,8 @@ const Signup = () => {
 
           <Input title="Enter full name*" cut={true} error={err1} />
           <Input title="Choose a username*" placeholder="Username" error={err2} herovalue={username} setherovalue={setusername} />
-          <Input title="Choose a password*" placeholder="Password" error={err3} herovalue={password} setherovalue={setpassword} />
-          <Input title="Confirm password*" placeholder="Re-enter" error={err4} herovalue={confirmpass} setherovalue={setconfirmpass} />
+          <Input title="Choose a password*" ispassword={true} placeholder="Password" error={err3} herovalue={password} setherovalue={setpassword} />
+          <Input title="Confirm password*" ispassword={true} placeholder="Re-enter" error={err4} herovalue={confirmpass} setherovalue={setconfirmpass} />
           <button onClick={handlecreateaccount} className='mb-7 sm:w-[580px] overflow-hidden flex justify-center items-center rounded-[10px] py-3 text-[18px] w-full bg-[#FFD700] text-[#0B0B0F] font-semibold ' >
             {loading ? (
               <div className='loader' >

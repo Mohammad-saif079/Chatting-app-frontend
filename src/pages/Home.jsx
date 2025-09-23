@@ -59,7 +59,7 @@ const Home = () => {
           <h1 className='sm:w-[full] w-[90vw] mx-0 my-1 text-white text-3xl '>Login account</h1>
 
           <Input title="Username*" placeholder="Username" error={err2} herovalue={username} setherovalue={setusername} />
-          <Input title="Password*" placeholder="Password" error={err3} herovalue={password} setherovalue={setpassword} />
+          <Input title="Password*" ispassword={true} placeholder="Password" error={err3} herovalue={password} setherovalue={setpassword} />
 
           <button onClick={handleLogin} className=' sm:w-[580px] overflow-hidden flex justify-center items-center rounded-[10px] py-3 text-[18px] w-full bg-[#FFD700] text-[#0B0B0F] font-semibold ' >
             {loading ? (
