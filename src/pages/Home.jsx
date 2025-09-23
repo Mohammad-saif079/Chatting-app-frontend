@@ -24,13 +24,8 @@ const Home = () => {
       if (password.trim() === "") {
         seterr3("*Required")
         valid = false;
-      } else {
-        if (password.length < 6) {
-          seterr3("*Password must be at least 6 characters");
-          valid = false;
-        } else {
-          seterr3("");
-        }
+      } else{
+        seterr3("")
       }
       if (valid) {
         setloading(true)
