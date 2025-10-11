@@ -8,11 +8,13 @@ export const Signupprovider = ({ children }) => {
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
   const [confirmpass, setconfirmpass] = useState("");
+  const [email, setemail] = useState("")
 
   const [err1, seterr1] = useState("");
   const [err2, seterr2] = useState("");
   const [err3, seterr3] = useState("");
   const [err4, seterr4] = useState("");
+  const [err5, seterr5] = useState("");
 
   const states = {
     firstname, setfirstname,
@@ -23,7 +25,9 @@ export const Signupprovider = ({ children }) => {
     err1, seterr1,
     err2, seterr2,
     err3, seterr3,
-    err4, seterr4
+    err4, seterr4,
+    err5, seterr5,
+    email,setemail
   };
 
   return (

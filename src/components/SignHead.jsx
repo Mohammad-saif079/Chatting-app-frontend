@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { Usesign } from '../context/Signupcontext'
 
 const SignHead = (props) => {
-    const { setfirstname, setlastname, setpassword, setusername,  setconfirmpass } = Usesign()
-    const { seterr1, seterr2, seterr3, seterr4 } = Usesign()
+    const { setfirstname, setlastname, setpassword, setusername, setconfirmpass,setemail } = Usesign()
+    const { seterr1, seterr2, seterr3, seterr4, seterr5 } = Usesign()
 
     const navigate = useNavigate()
 
@@ -19,6 +19,8 @@ const SignHead = (props) => {
         seterr2("");
         seterr3("");
         seterr4("");
+        seterr5("");
+        setemail("");
 
         if (props.create) {
             navigate("/signup")

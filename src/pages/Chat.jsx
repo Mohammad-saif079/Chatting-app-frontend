@@ -318,7 +318,7 @@ const Chat = () => {
                 {/* Messages */}
                 <div
                     ref={msgContainerRef}
-                    className="msgcontainer h-[calc(100svh-187px)] flex flex-col items-center overflow-y-scroll"
+                    className="msgcontainer h-[calc(100svh-187px)] flex flex-col items-center overflow-y-scroll  "
                 >
                     {messages.map((msg, i) =>
                         msg.sender_id === mainid ? (

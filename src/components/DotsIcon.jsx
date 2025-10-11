@@ -1,6 +1,6 @@
 import React from "react";
 
-const DotsIcon = ({ size = 28, color = "#0B0B0F" }) => {
+const DotsIcon = ({ size = 27, color = "#0B0B0F" }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
