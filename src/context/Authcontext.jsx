@@ -5,14 +5,10 @@ const AuthContext = createContext();
 
 // 2️⃣ Create the provider
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  // login & logout logic
-  const login = (userData) => setUser(userData);
-  const logout = () => setUser(null);
+  const [authToken, setauthToken] = useState(localStorage.getItem("AuthToken"))
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ authToken }}>
       {children}
     </AuthContext.Provider>
   );

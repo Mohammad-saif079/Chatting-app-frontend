@@ -1,11 +1,13 @@
 import React from 'react'
 import Profile from './Profile'
 import { useChat } from '../context/Chatcontext'
+import { useNavigate } from 'react-router-dom'
 
 const UserId = (props) => {
     const { setchatbox, setcontact, setcontact_status } = useChat()
-
+    const navigate = useNavigate()
     const handlechat = async () => {
+        navigate(`/chats/${props.fullname}`,{replace:true})
         setchatbox("flex")
         setcontact(props.fullname)
         

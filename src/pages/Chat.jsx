@@ -10,18 +10,27 @@ import ThreeDots from '../components/ThreeDots'
 import Message from '../components/Message'
 import Lenis from '@studio-freight/lenis'
 import { useChat } from '../context/Chatcontext'
+import { useParams } from 'react-router-dom'
+import bgpic from "../assets/doodle.png"
+import { useNavigate } from 'react-router-dom'
 
 const Chat = () => {
+    const navigate = useNavigate()
+    const { chatid } = useParams()
+    const [chatId, setchatId] = useState(chatid)
+  
     const [search, setsearch] = useState("")
     const { mainid, contact, contact_status, setcontact, setcontact_status, setmainid, chatbox, setchatbox } = useChat()
 
-
+    const [mainloading, setmainloading] = useState("flex")
     // refs for scrollable containers
     const userBoxRef = useRef(null)
     const msgContainerRef = useRef(null)
 
     const handlechatback = () => {
+
         setchatbox("hidden")
+        navigate("/chats",{replace:true})
     }
 
 
@@ -215,6 +224,7 @@ const Chat = () => {
     const [users, setusers] = useState(data)
     const [messages, setmessages] = useState(message_data)
 
+    //lenis use Effect
     useEffect(() => {
         const createLenis = (element) => {
             const lenis = new Lenis({
@@ -242,7 +252,23 @@ const Chat = () => {
         }
     }, [])
 
+
+
+    useEffect(() => {
+        if (chatId) {
+            setcontact(chatId)
+            setchatbox("flex")
+        }
+
+        setmainloading("hidden")
+
+
+    },[])
+
+
+
     return (
+
         <div className="mainchat md:flex-row gap-0 flex-col flex md:gap-2">
             {/* Sidebar */}
             <div className="sidenavbar  md:h-[100svh] W-[90px] flex md:flex-col justify-between items-center">
@@ -314,43 +340,53 @@ const Chat = () => {
                         <ThreeDots />
                     </button>
                 </div>
+                <div style={{ backgroundImage: `url(${bgpic})`, backgroundSize: "200px" }} className='bg-repeat' >
 
-                {/* Messages */}
-                <div
-                    ref={msgContainerRef}
-                    className="msgcontainer h-[calc(100svh-187px)] flex flex-col items-center overflow-y-scroll  "
-                >
-                    {messages.map((msg, i) =>
-                        msg.sender_id === mainid ? (
-                            <Message
-                                key={i}
-                                sent={true}
-                                message={msg.message}
-                                time={msg.timestamp}
-                            />
-                        ) : (
-                            <Message
-                                key={i}
-                                sent={false}
-                                message={msg.message}
-                                time={msg.timestamp}
-                            />
-                        )
-                    )}
+                    {/* Messages */}
+                    <div
+                        ref={msgContainerRef}
+                        className={`msgcontainer h-[calc(100svh-187px)] flex flex-col items-center overflow-y-scroll   `}
+
+                    >
+                        {messages.map((msg, i) =>
+                            msg.sender_id === mainid ? (
+                                <Message
+                                    key={i}
+                                    sent={true}
+                                    message={msg.message}
+                                    time={msg.timestamp}
+                                />
+                            ) : (
+                                <Message
+                                    key={i}
+                                    sent={false}
+                                    message={msg.message}
+                                    time={msg.timestamp}
+                                />
+                            )
+                        )}
+                    </div>
+
+                    {/* Send box */}
+                    <div className="sendmsgbox m-5 flex justify-between items-center gap-3">
+                        <input
+                            placeholder="Type your Message"
+                            className="w-[calc(100%-30px)] pl-4 py-3 text-white box bg-[#1F1F2B] text-[18px] outline-0 placeholder:text-[#A3A3A3] rounded-[10px]"
+                            type="text"
+                        />
+                        <button>
+                            <SendIcon />
+                        </button>
+                    </div>
                 </div>
 
-                {/* Send box */}
-                <div className="sendmsgbox m-5 flex justify-between items-center gap-3">
-                    <input
-                        placeholder="Type your Message"
-                        className="w-[calc(100%-30px)] pl-4 py-3 text-white box bg-[#1F1F2B] text-[18px] outline-0 placeholder:text-[#A3A3A3] rounded-[10px]"
-                        type="text"
-                    />
-                    <button>
-                        <SendIcon />
-                    </button>
-                </div>
             </div>
+
+
+            <div className={`w-full h-[100svh] bg-black fixed top-0 ${mainloading} justify-center items-center`}>
+                <Logo size="60" />
+            </div>
+
         </div>
     )
 }

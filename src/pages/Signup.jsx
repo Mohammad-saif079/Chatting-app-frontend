@@ -99,6 +99,7 @@ const Signup = () => {
             }
 
           } else {
+            localStorage.setItem("AuthToken",response.data.token)
             const tl = gsap.timeline()
             tl.to(".toaster", {
               y: 20,
