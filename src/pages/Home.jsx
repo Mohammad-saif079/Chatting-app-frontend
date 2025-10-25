@@ -6,11 +6,12 @@ import { Usesign } from '../context/Signupcontext.jsx'
 import { gsap } from "gsap";
 import axios from "axios"
 import Toaster from '../components/Toaster.jsx'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
   const [loading, setloading] = useState(false)
   const { username, password, setusername, setpassword, err2, err3, seterr2, seterr3 } = Usesign()
-
+  const navigate = useNavigate()
   const handleLogin = async () => {
     if (!loading) {
 
@@ -31,19 +32,7 @@ const Home = () => {
       }
       if (valid) {
         setloading(true)
-                 const tl = gsap.timeline()
-            tl.to(".toaster", {
-              y: 20,
-              duration: 0.9,
-              scale: 1,
-              ease: "power4.out"
-            })
-            tl.to(".toaster", {
-              y: "-100%",
-              duration: 0.9,
-              scale: 1,
-              ease: "power4.out"
-            })
+
 
 
 
@@ -54,11 +43,33 @@ const Home = () => {
             password: password.trim()
           })
           console.log(res.data)
-          if (res.data.success) {
-   
+          if (res.data.sucess) {
+            const tl = gsap.timeline()
+            tl.to(".toaster", {
+              y: 20,
+              duration: 0.9,
+              scale: 1,
+              ease: "power4.out"
+            })
+            tl.to(".toaster", {
+              y: "-100%",
+              duration: 0.9,
+              scale: 1,
+              ease: "power4.out",
+              onComplete:()=>{
+                console.log(res.data)
+                localStorage.setItem("AuthToken",res.data.token)
+                navigate("/chats",{replace:true})
+
+              }
+            })
+
           }
-          seterr2(res.data.message)
-          setloading(false)
+          else {
+
+            seterr2(res.data.message)
+            setloading(false)
+          }
 
         }
         catch (err) {

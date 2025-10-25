@@ -13,16 +13,21 @@ import { useChat } from '../context/Chatcontext'
 import { useParams } from 'react-router-dom'
 import bgpic from "../assets/doodle.png"
 import { useNavigate } from 'react-router-dom'
+import Logout from '../components/Logout'
+import DotsIcon from '../components/DotsIcon'
+import { gsap } from "gsap";
+import axios from 'axios'
+import { Timeline } from 'gsap/gsap-core'
 
 const Chat = () => {
     const navigate = useNavigate()
-    const { chatid } = useParams()
-    const [chatId, setchatId] = useState(chatid)
-  
+
+
     const [search, setsearch] = useState("")
     const { mainid, contact, contact_status, setcontact, setcontact_status, setmainid, chatbox, setchatbox } = useChat()
 
     const [mainloading, setmainloading] = useState("flex")
+    const [logoutLoad, setlogoutLoad] = useState(false)
     // refs for scrollable containers
     const userBoxRef = useRef(null)
     const msgContainerRef = useRef(null)
@@ -30,89 +35,24 @@ const Chat = () => {
     const handlechatback = () => {
 
         setchatbox("hidden")
-        navigate("/chats",{replace:true})
+        navigate("/chats", { replace: true })
+    }
+    const handlelogout = async () => {
+        setlogoutLoad(true)
+        console.log(mainid)
+        const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/logout`, {
+            _id: mainid
+        })
+        setmainid("")
+        localStorage.setItem("AuthToken", "")
+
+        navigate("/", { replace: true })
+        setlogoutLoad(false)
     }
 
 
-    const data = [
-        {
-            _id: "651f2b4c8f0e4d23a1c7e9b5",
-            fullname: "Saifu",
-            status: true,
-            bio: "She is my everything",
-            username: "saifu17"
-        },
-        {
-            _id: "651f2b4c8f0e4d23a1c7e9b6",
-            fullname: "Alok",
-            status: true,
-            bio: "World-famous DJ who boosts allies with music power.",
-            username: "alok_ff"
-        },
-        {
-            _id: "651f2c1a7d9a4e34b2a8c9d6",
-            fullname: "Kelly",
-            status: false,
-            bio: "The sprinter queen known for her incredible speed.",
-            username: "kelly_speed"
-        },
-        {
-            _id: "651f2d3b5e7a9f12c3b7d8e4",
-            fullname: "Hayato",
-            status: true,
-            bio: "Samurai with a cursed bloodline, master of armor penetration.",
-            username: "hayato_samurai"
-        },
-        {
-            _id: "651f2e4d9a1b7c23e4f8d9b7",
-            fullname: "Chrono",
-            status: true,
-            bio: "Time-warping warrior who creates protective force fields.",
-            username: "chrono_time"
-        },
-        {
-            _id: "651f2f5e8c2d3a14b7e9c8d2",
-            fullname: "Moco",
-            status: false,
-            bio: "Elite hacker who tags enemies and shares intel with allies.",
-            username: "moco_hacker"
-        },
-        {
-            _id: "651f306f9d3e2b45c8a7d9e1",
-            fullname: "Kla",
-            status: true,
-            bio: "Muay Thai fighter with devastating fist power.",
-            username: "kla_fighter"
-        },
-        {
-            _id: "651f317a1e4f3c56d9b8a7c3",
-            fullname: "Jota",
-            status: false,
-            bio: "Fearless stuntman who recovers HP with every kill.",
-            username: "jota_stunt"
-        },
-        {
-            _id: "651f328b2f5a4d67e1c9b8d4",
-            fullname: "Laura",
-            status: true,
-            bio: "Sharp-eyed agent with deadly accuracy in scopes.",
-            username: "laura_scope"
-        },
-        {
-            _id: "651f339c3a6b5e78f2d1a9e5",
-            fullname: "Maxim",
-            status: false,
-            bio: "Foodie who eats and heals faster than anyone else.",
-            username: "maxim_foodie"
-        },
-        {
-            _id: "651f34ad4b7c6f89a3e2b1f6",
-            fullname: "Wukong",
-            status: true,
-            bio: "Trickster monkey king who transforms to confuse enemies.",
-            username: "wukong_king"
-        }
-    ];
+
+
 
 
     const message_data = [
@@ -221,11 +161,11 @@ const Chat = () => {
     ]
 
 
-    const [users, setusers] = useState(data)
+    const [users, setusers] = useState([])
     const [messages, setmessages] = useState(message_data)
 
-    //lenis use Effect
-    useEffect(() => {
+    //lenis function
+    const LenisStart = async () => {
         const createLenis = (element) => {
             const lenis = new Lenis({
                 wrapper: element,
@@ -250,21 +190,39 @@ const Chat = () => {
             lenisUser.destroy()
             lenisMsg.destroy()
         }
-    }, [])
-
-
+    }
+    //loader animation useEffect
+    useEffect(() => {
+        gsap.to(".loader", {
+            rotate: 360,
+            duration: 2,
+            repeat: -1,
+            ease: "linear"
+        })
+    }, [logoutLoad])
 
     useEffect(() => {
-        if (chatId) {
-            setcontact(chatId)
-            setchatbox("flex")
+        async function fetchdata() {
+
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/valid`, {
+                token: localStorage.getItem("AuthToken")
+            })
+            setmainid(res.data.data)
+            const users = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/allusers`)
+            console.log(users.data)
+            setusers(users.data.users)
+            LenisStart()
+
+            setmainloading("hidden")
+
         }
+        fetchdata()
 
-        setmainloading("hidden")
 
 
-    },[])
+    }, [])
 
+   
 
 
     return (
@@ -276,19 +234,30 @@ const Chat = () => {
                     <Logo size={50} />
                     <h1 className='text-3xl text-[#ffd700] font-medium flex md:hidden '  >WhatsApp</h1>
                 </div>
-                <button className="m-5">
-                    <SettingIcon size={40} />
-                </button>
+                <div className='flex md:flex-col justify-center items-center'>
+
+
+                    <button className="m-1 flex justify-center items-center " onClick={handlelogout} >
+                        {logoutLoad ? (<div className='loader' ><DotsIcon color='#fff' size={37} /></div>) : (<Logout size={40} />)}
+
+                    </button>
+
+                    <button className="m-5">
+                    
+                        <Profile size={40} />
+                    </button>
+                </div>
             </div>
 
             {/* Users */}
             <div className="md:h-[100svh] h-[calc(100svh-90px)] md:w-[40%] w-[100%] ">
-                <div className="searchbox w-[calc(100%-40px)] md:m-5 mx-5 mb-5 flex justify-center items-center gap-3">
-                    <GlobalInput placeholder={"Search a User"} />
-                    <button>
-                        <SearchIcon />
+                <div className="relative searchbox w-[calc(100%-40px)] md:m-5 mx-5 mb-5 flex justify-center items-center gap-3">
+                    <GlobalInput placeholder={"Search a User by Username"} />
+                    <button className='absolute right-2  p-2 ' >
+                        <SearchIcon  />
                     </button>
                 </div>
+
                 <div
                     id="userbox"
                     ref={userBoxRef}
@@ -296,6 +265,8 @@ const Chat = () => {
                     {users.map((user) => {
                         const new_bio =
                             user.bio.length > 26 ? user.bio.slice(0, 26) + "..." : user.bio;
+                        const date = new Date(user.lastSeen);
+                        const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
                         return (
                             <UserId
@@ -304,6 +275,10 @@ const Chat = () => {
                                 fullname={user.fullname}
                                 status={user.status}
                                 bio={new_bio}
+                                profile={user.profilePic}
+                                lastseen={time}
+                                username={user.username}
+                                isAdmin={user.isAdmin}XZ 
                             />
                         );
                     })}

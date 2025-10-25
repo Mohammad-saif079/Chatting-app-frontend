@@ -1,7 +1,7 @@
 // SearchIcon.jsx
 import React from "react";
 
-const SearchIcon = ({ size = 35, color = "white" }) => {
+const SearchIcon = ({ size = 25, color = "#a3a3a3" }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"

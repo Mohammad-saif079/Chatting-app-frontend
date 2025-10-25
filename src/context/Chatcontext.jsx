@@ -5,7 +5,7 @@ const chatContext = createContext();
 
 // 2️⃣ Create the provider
 export const ChatProvider = ({ children }) => {
-    const [mainid, setmainid] = useState("651f2b4c8f0e4d23a1c7e9b5")
+    const [mainid, setmainid] = useState("")
 
     const [contact, setcontact] = useState("")
     const [contact_status, setcontact_status] = useState("")

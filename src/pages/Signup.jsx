@@ -2,6 +2,7 @@ import SignHead from '../components/SignHead'
 import Input from '../components/Input'
 import { useState, useEffect } from "react"
 import { Usesign } from "../context/Signupcontext.jsx"
+import { useChat } from '../context/Chatcontext.jsx';
 import { gsap } from "gsap";
 import DotsIcon from '../components/DotsIcon.jsx';
 import Toaster from '../components/Toaster.jsx';
@@ -11,10 +12,11 @@ import { useNavigate } from 'react-router-dom';
 const Signup = () => {
   const { firstname, lastname, password, setpassword, username, email, setemail, setusername, confirmpass, setconfirmpass } = Usesign()
   const { err1, err5, err2, err3, err4, seterr1, seterr2, seterr3, seterr4, seterr5 } = Usesign()
+  const { mainid, setmainid } = useChat()
+
   const [loading, setloading] = useState(false)
   //function for submission
   const navigate = useNavigate()
-
   const handlecreateaccount = async () => {
     if (!loading) {
       let valid = true;
@@ -99,7 +101,7 @@ const Signup = () => {
             }
 
           } else {
-            localStorage.setItem("AuthToken",response.data.token)
+            localStorage.setItem("AuthToken", response.data.token)
             const tl = gsap.timeline()
             tl.to(".toaster", {
               y: 20,
@@ -113,7 +115,9 @@ const Signup = () => {
               scale: 1,
               ease: "power4.out",
               onComplete: () => {
-                console.log("account created")
+                
+                setmainid(response.data.user.id)
+                // console.log("account created")
                 navigate("/chats",{replace:true})
               }
             })
