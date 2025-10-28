@@ -8,7 +8,7 @@ const Message = (props) => {
                 <span className='text-white' >{props.time}</span>
             </div>) : (
                 <div className=" mx-3 my-1  flex flex-col gap-1 justify-center ">
-                    <div className="text max-w-[50%] text-[#fff] w-fit text-lg py-1 px-3 rounded-md font-medium bg-[#2F3136]">{props.message}</div>
+                    <div className="text max-w-[90%] text-[#fff] w-fit text-lg py-1 px-3 rounded-md font-medium bg-[#2F3136] break-all whitespace-pre-wrap ">{props.message}</div>
                     <span className='text-white' >{props.time}</span>
                 </div>
             )}
