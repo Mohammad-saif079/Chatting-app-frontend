@@ -3,23 +3,55 @@ import Profile from './Profile'
 import { useChat } from '../context/Chatcontext'
 import { useNavigate } from 'react-router-dom'
 import Verified from './Verified'
+import axios from 'axios'
 
 const UserId = (props) => {
-    const { setchatbox, setcontact, setcontact_status } = useChat()
+    const { setmessages, setchatbox, setcontact, setcontact_status, setchatselected, setmsgloading,setpfp } = useChat()
     const navigate = useNavigate()
-    const handlechat = async () => {
-        navigate(`/chats/${props.username}`, { replace: true })
-        setchatbox("flex")
-        setcontact(props.fullname)
 
-        props.status ? setcontact_status("Online") : setcontact_status("Offline")
+    const handlechat = async () => {
+
+        navigate(`/chats/${props.username}`, { replace: true })
+        await props.setchattid(props.username)
+        props.updateref(props.username)
+        props.setmssginput("")
+        setchatbox("flex")
+        setchatselected(true)
+        setmsgloading(true)
+        const selecteduser = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/searchuser`, {
+            username: props.username
+        })
+        const selecteduser_data = selecteduser.data[0]
+        props.setslctuserglobe(selecteduser_data)
+        setcontact(selecteduser_data.fullname)
+        { selecteduser_data.status ? setcontact_status("Online") : setcontact_status("Offline") }
+        setpfp(selecteduser_data.profilePic)
+        const clear = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/clearunread`, {
+            userone: props.userone,
+            usertwo: props.id
+        })
+
+        const users = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/alladmins`, {
+            contacts: clear.data.contacts
+        })
+        
+        props.setuser(users.data.users)
+
+
+        const messages = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/msg/getmessages`, {
+            userone: props.userone,
+            usertwo: props.username
+        })
+        setmessages(messages.data)
+        setmsgloading(false)
+
 
 
     }
 
 
     return (
-        <div onClick={handlechat} className="users h-[65px] ml-5 mb-1 flex items-center justify-between  w-[90%] ">
+        <div onClick={handlechat}  className="users relative md:static h-[65px] ml-5 mb-1 flex items-center justify-between  w-[100%] md:w-[90%] ">
             <div className='flex gap-4 items-center' >
                 {props.profile == "default" ? (<Profile />) :
                     <div style={{ backgroundImage: `url(${props.profile})` }} className={`bg-cover bg-center w-[50px] h-[50px] rounded-full `} >
@@ -30,26 +62,26 @@ const UserId = (props) => {
                 <div className='flex flex-col' >
                     <div className="flex items-center justify-start gap-1.5" >
                         <div className='text-2xl text-white ' >{props.fullname}</div>
-                        {props.isAdmin?(<Verified />):("")}
-                        
+                        {props.isAdmin ? (<Verified />) : ("")}
+
 
 
                     </div>
-                    <span className='text-[16px] text-[#a3a3a3] ' >{props.bio}</span>
+                    {props.unreadmessages > 0 ? (
+                        <span className="text-[16px] font-semibold text-[#ffffff]">{props.unreadmessages} unread messages</span>
+
+                    ) : (
+                        <span className="text-[16px] text-[#a3a3a3]">{props.bio}</span>
+                    )}
 
                 </div>
             </div>
-            {props.status ? (<div className='text-white flex items-center gap-1 justify-center ' >
+            <div className='text-white flex items-center gap-1 justify-center absolute right-10 md:static  ' >
 
-                <span className='text-[#a3a3a3]' >Active</span>
-            </div>) : (
-                <div className='text-white flex items-center gap-1 justify-center ' >
+                <span className='text-[#a3a3a3]' >{props.lastseen}</span>
+            </div>
 
-                    <span className='text-[#a3a3a3]' >{props.lastseen}</span>
-                </div>
-            )}
-
-        </div>
+        </div >
     )
 }
 

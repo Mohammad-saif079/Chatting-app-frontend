@@ -10,6 +10,8 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { useAuth } from './context/Authcontext.jsx'
 import LoginCheck from './components/LoginCheck.jsx'
 
+import VideoPlayer from './pages/Video.jsx'
+
 const App = () => {
 
   return (
@@ -19,7 +21,7 @@ const App = () => {
         <Route path='/' element={<LoginCheck><Signupprovider><Home /></Signupprovider></LoginCheck>} />
         <Route path='/signup' element={<LoginCheck><Signupprovider><Signup /></Signupprovider></LoginCheck>} />
         <Route path='/chats/:chatid?' element={<ProtectedRoute><ChatProvider><Chat /></ChatProvider></ProtectedRoute>} />
-
+        <Route path='/video' element={<VideoPlayer/>} />
 
       </Routes>
     </>

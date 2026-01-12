@@ -9,14 +9,26 @@
   <title>Vite + React</title>
   <style>
     /* hide scrollbar globally */
-   
+
 
     *::-webkit-scrollbar,
     *::-webkit-scrollbar {
       display: none;
       /* Chrome, Safari */
     }
-   
+
+    input::-webkit-search-cancel-button {
+      display: none;
+    }
+
+    body {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
   </style>
 
 </head>
