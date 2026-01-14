@@ -42,7 +42,7 @@ const Home = () => {
             username: username.trim(),
             password: password.trim()
           })
-          console.log(res.data)
+    
           if (res.data.sucess) {
             const tl = gsap.timeline()
             tl.to(".toaster", {
@@ -57,7 +57,7 @@ const Home = () => {
               scale: 1,
               ease: "power4.out",
               onComplete:()=>{
-                console.log(res.data)
+            
                 localStorage.setItem("AuthToken",res.data.token)
                 navigate("/chats",{replace:true})
 

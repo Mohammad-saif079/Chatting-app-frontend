@@ -4,12 +4,23 @@ import { useChat } from '../context/Chatcontext'
 import { useNavigate } from 'react-router-dom'
 import Verified from './Verified'
 import axios from 'axios'
+import BgWithSkeleton from './SkeletalBg'
 
 const UserId = (props) => {
-    const { setmessages, setchatbox, setcontact, setcontact_status, setchatselected, setmsgloading,setpfp } = useChat()
+    const { setmessages, setchatbox, setcontact, setcontact_status, setchatselected, setmsgloading, setpfp } = useChat()
     const navigate = useNavigate()
 
     const handlechat = async () => {
+        if (props.username === props.userone) {
+            return;
+        }
+
+        if (props.username === props.chatIdRef.current) {
+            return;
+        }
+        props.setCursor(null);
+        props.setHasMore(true);
+        setmessages([]);
 
         navigate(`/chats/${props.username}`, { replace: true })
         await props.setchattid(props.username)
@@ -19,7 +30,8 @@ const UserId = (props) => {
         setchatselected(true)
         setmsgloading(true)
         const selecteduser = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/searchuser`, {
-            username: props.username
+            username: props.username,
+            token: localStorage.getItem("AuthToken")
         })
         const selecteduser_data = selecteduser.data[0]
         props.setslctuserglobe(selecteduser_data)
@@ -28,21 +40,31 @@ const UserId = (props) => {
         setpfp(selecteduser_data.profilePic)
         const clear = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/clearunread`, {
             userone: props.userone,
-            usertwo: props.id
+            usertwo: props.id,
+            token: localStorage.getItem("AuthToken")
         })
 
         const users = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/alladmins`, {
-            contacts: clear.data.contacts
+            contacts: clear.data.contacts,
+            token: localStorage.getItem("AuthToken")
         })
-        
+
         props.setuser(users.data.users)
 
 
-        const messages = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/msg/getmessages`, {
-            userone: props.userone,
-            usertwo: props.username
-        })
-        setmessages(messages.data)
+        const resMsgs = await axios.post(
+            `${import.meta.env.VITE_BACKEND_URL}/msg/getmessages`,
+            {
+                userone: props.userone,
+                usertwo: props.username,
+                limit: 9,
+                token: localStorage.getItem("AuthToken")
+            }
+        );
+        setmessages(resMsgs.data.messages)
+        props.setCursor(resMsgs.data.nextCursor);
+        props.setHasMore(resMsgs.data.hasMore);
+
         setmsgloading(false)
 
 
@@ -51,12 +73,13 @@ const UserId = (props) => {
 
 
     return (
-        <div onClick={handlechat}  className="users relative md:static h-[65px] ml-5 mb-1 flex items-center justify-between  w-[100%] md:w-[90%] ">
+        <div onClick={handlechat} className="users relative md:static h-[65px] ml-5 mb-1 flex items-center justify-between  w-[100%] md:w-[90%] ">
             <div className='flex gap-4 items-center' >
                 {props.profile == "default" ? (<Profile />) :
-                    <div style={{ backgroundImage: `url(${props.profile})` }} className={`bg-cover bg-center w-[50px] h-[50px] rounded-full `} >
+                    // <div style={{ backgroundImage: `url(${props.profile})` }} className={`bg-cover bg-center w-[50px] h-[50px] rounded-full `} >
 
-                    </div>
+                    // </div>
+                    <BgWithSkeleton imageUrl={props.profile} size={50} />
                 }
 
                 <div className='flex flex-col' >
