@@ -57,14 +57,7 @@ const Chat = () => {
 
     const [dragging, setDragging] = useState(false);
 
-    useEffect(() => {
-        gsap.set(profileRef.current, {
-            opacity: 0,
-            scale: 0.95,
-            pointerEvents: "none",
-        });
-    }, []);
-
+  
 
     const handleClick = () => {
         fileInputRef.current.click();
@@ -233,35 +226,19 @@ const Chat = () => {
 
         previewimg.current = mainid.profilePic;
 
-        gsap.to(profileRef.current, {
-            opacity: 1,
-            scale: 1,
-            duration: 0.07,
-            ease: "power3.out",
-            pointerEvents: "auto",
-        });
     };
     const closeProfile = () => {
-        gsap.to(profileRef.current, {
-            opacity: 0,
-            scale: 0.95,
-            duration: 0.2,
-            ease: "power3.in",
-            pointerEvents: "none",
-            onComplete: () => {
-                setprofilewindow("hidden");
-                setremovepfp(false);
-                setcanupdated(false);
-                setFile(null);
-                setupdatebio("");
-                setupdatefullname("");
+        setprofilewindow("hidden");
+        setremovepfp(false);
+        setcanupdated(false);
+        setFile(null);
+        setupdatebio("");
+        setupdatefullname("");
 
-                setmainid(prev => ({
-                    ...prev,
-                    profilePic: previewimg.current
-                }));
-            }
-        });
+        setmainid(prev => ({
+            ...prev,
+            profilePic: previewimg.current
+        }));
     };
 
 
@@ -932,7 +909,7 @@ const Chat = () => {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                className="profile-window fixed inset-0 z-9 flex justify-center items-center bg-black/40 backdrop-blur-md"
+                className={`profile-window fixed inset-0  ${profilewindow} justify-center items-center bg-black/40 backdrop-blur-md`}
             >
                 <button onClick={closeProfile} className='absolute top-0 right-0 p-4' >
                     <svg
@@ -1019,19 +996,19 @@ const Chat = () => {
                             </button>
                             <h1 className='text-2xl' >{mainid.username}</h1>
                             <div className='text-xl absolute -top-5 -right-7 ' onClick={handleremovepfp} >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="40"
-                                fill="white"
-                                viewBox="0 0 16 16"
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="40"
+                                    fill="white"
+                                    viewBox="0 0 16 16"
 
-                            >
-                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                            </svg>
-                        </div>
+                                >
+                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                </svg>
+                            </div>
                         </div>
 
-                        
+
 
                     </div>
 
