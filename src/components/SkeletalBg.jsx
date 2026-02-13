@@ -15,6 +15,10 @@ const BgWithSkeleton = ({ imageUrl, size }) => {
 
     const checkImage = async () => {
       try {
+        if (imageUrl?.startsWith("blob:")) {
+          setStatus("loaded");
+          return;
+        }
         const res = await fetch(imageUrl, { method: "HEAD" });
 
         if (!res.ok) {

@@ -11,11 +11,9 @@ import { useChat } from '../context/Chatcontext'
 import { useParams } from 'react-router-dom'
 
 import { useNavigate } from 'react-router-dom'
-import Logout from '../components/Logout'
-import DotsIcon from '../components/DotsIcon'
 import { gsap } from "gsap";
 import axios from 'axios'
-import { Timeline } from 'gsap/gsap-core'
+
 import { io } from "socket.io-client";
 import Toaster from '../components/Toaster'
 import Lightlogo from '../components/Lightlogo'
@@ -44,7 +42,7 @@ const Chat = () => {
     }
 
     const profileRef = useRef(null);
-
+    const [removepfp, setremovepfp] = useState(false)
 
     //file uploader logic starts here
 
@@ -57,22 +55,26 @@ const Chat = () => {
 
     const [dragging, setDragging] = useState(false);
 
-  
+
 
     const handleClick = () => {
         fileInputRef.current.click();
     };
 
-    const handleFile = async (selectedFile) => {
+    const handleFile = (selectedFile) => {
         if (!selectedFile) return;
-        if (!selectedFile.type.startsWith("image/")) {
-            return;
-        }
+        if (!selectedFile.type.startsWith("image/")) return;
+
         setFile(selectedFile);
+
         const objectUrl = URL.createObjectURL(selectedFile);
+
+
+        console.log(objectUrl)
+
+        // save original only once
         if (!previewimg.current) {
             previewimg.current = mainid.profilePic;
-
         }
 
         setmainid(prev => ({
@@ -80,6 +82,7 @@ const Chat = () => {
             profilePic: objectUrl
         }));
     };
+
 
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -126,14 +129,14 @@ const Chat = () => {
     const [updatebio, setupdatebio] = useState("")
 
     useEffect(() => {
-        if (!file && updatefullname.trim() === "" && updatebio.trim() === "") {
+        if (!file && updatefullname.trim() === "" && updatebio.trim() === "" && !removepfp) {
             setcanupdated(false)
         }
         else {
             setcanupdated(true)
         }
 
-    }, [updatefullname, updatebio, file])
+    }, [updatefullname, updatebio, file, removepfp])
 
     const loadOlderMessages = async () => {
         if (!hasMore || loadingOlder) return;
@@ -228,18 +231,21 @@ const Chat = () => {
 
     };
     const closeProfile = () => {
+        if (mainid.profilePic?.startsWith("blob:")) {
+            URL.revokeObjectURL(mainid.profilePic);
+        }
+
         setprofilewindow("hidden");
-        setremovepfp(false);
-        setcanupdated(false);
         setFile(null);
-        setupdatebio("");
-        setupdatefullname("");
+        setcanupdated(false);
+        setremovepfp(false);
 
         setmainid(prev => ({
             ...prev,
             profilePic: previewimg.current
         }));
     };
+
 
 
     const [isTyping, setIsTyping] = useState(false)
@@ -331,7 +337,7 @@ const Chat = () => {
 
     }
 
-    const [removepfp, setremovepfp] = useState(false)
+
 
     const handleremovepfp = () => {
         // previewimg.current = "default"
@@ -342,11 +348,12 @@ const Chat = () => {
             profilePic: "default"
         }));
         setFile(null)
-        setcanupdated(true)
+    
+
         // setremovepfp(true)
     }
 
-
+    console.log(canupdated)
     //handling user profile update
     const [updateLoad, setupdateLoad] = useState("Update")
     const updateprofilehandler = async () => {
@@ -519,7 +526,10 @@ const Chat = () => {
 
 
         socket.on("userStatus", async (data) => {
+            console.log("status change")
+            
             if (data.username === chatid && data.type === "connect") {
+                
                 setcontact_status("Online")
 
             }
@@ -726,9 +736,7 @@ const Chat = () => {
                         </div>
 
                     </div>
-                    <button>
-                        <ThreeDots color={"#0B0B0F"} />
-                    </button>
+
                 </div>
                 <div className="flex flex-col relative">
 
@@ -797,7 +805,7 @@ const Chat = () => {
                         </div>
 
                         {/* Send box */}
-                        <div className="sendmsgbox m-5 flex justify-between items-center gap-3">
+                        <div className="sendmsgbox -z-2  m-5 flex justify-between items-center gap-3">
                             <input
                                 ref={messageRef}
                                 value={msginput}
@@ -894,7 +902,7 @@ const Chat = () => {
             )}
 
 
-            <div className=' w-[100vw] z-5 flex justify-center z-10 toaster fixed top-0 translate-y-[-100%] scale-[1]  ' >
+            <div className=' w-[100vw]  flex justify-center z-10 toaster fixed top-0 translate-y-[-100%] scale-[1]  ' >
                 <Toaster />
             </div>
 
@@ -909,7 +917,7 @@ const Chat = () => {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                className={`profile-window fixed inset-0  ${profilewindow} justify-center items-center bg-black/40 backdrop-blur-md`}
+                className={`profile-window z-10 fixed inset-0  ${profilewindow} justify-center items-center bg-black/40 backdrop-blur-md`}
             >
                 <button onClick={closeProfile} className='absolute top-0 right-0 p-4' >
                     <svg
@@ -926,7 +934,7 @@ const Chat = () => {
                 <div className='text-white  sm:w-[600px] w-[90vw] ' >
                     <div className='flex justify-center items-start gap-1 ' >
 
-                        <div className='flex flex-col justify-center relative items-center  ' >
+                        <div className='flex flex-col justify-center relative gap-2 items-center  ' >
 
                             <button className='relative'
                                 onClick={handleClick}
@@ -963,7 +971,12 @@ const Chat = () => {
                                             ? <Profile size={80} />
                                             : (
 
-                                                <BgWithSkeleton imageUrl={mainid.profilePic} size={80} />
+                                                <BgWithSkeleton
+                                                    key={mainid.profilePic}
+                                                    imageUrl={mainid.profilePic}
+                                                    size={80}
+                                                />
+
                                             )
                                 }
 

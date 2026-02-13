@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { Usesign } from "../context/Signupcontext.jsx"
 import { useChat } from '../context/Chatcontext.jsx';
 import { gsap } from "gsap";
-import DotsIcon from '../components/DotsIcon.jsx';
 import Toaster from '../components/Toaster.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -115,10 +114,10 @@ const Signup = () => {
               scale: 1,
               ease: "power4.out",
               onComplete: () => {
-                
+
                 setmainid(response.data.user.id)
                 // console.log("account created")
-                navigate("/chats",{replace:true})
+                navigate("/chats", { replace: true })
               }
             })
 
@@ -137,14 +136,7 @@ const Signup = () => {
 
   }
 
-  useEffect(() => {
-    gsap.to(".loader", {
-      rotate: 360,
-      duration: 2,
-      repeat: -1,
-      ease: "linear"
-    })
-  }, [loading])
+
 
 
 
@@ -169,9 +161,7 @@ const Signup = () => {
           <Input title="Confirm password*" ispassword={true} placeholder="Re-enter" error={err4} herovalue={confirmpass} setherovalue={setconfirmpass} />
           <button onClick={handlecreateaccount} className='mb-7 sm:w-[580px] overflow-hidden flex justify-center items-center rounded-[10px] py-3 text-[18px] w-full bg-[#FFD700] text-[#0B0B0F] font-semibold ' >
             {loading ? (
-              <div className='loader' >
-                <DotsIcon />
-              </div>
+              <span className="animate-spin w-[27px] h-[27px] border-3 border-black border-t-transparent rounded-full"></span>
             ) : "Create account"}
           </button>
         </div>

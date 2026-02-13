@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import SignHead from '../components/SignHead'
 import Input from '../components/Input'
-import DotsIcon from '../components/DotsIcon'
+
 import { Usesign } from '../context/Signupcontext.jsx'
 import { gsap } from "gsap";
 import axios from "axios"
@@ -42,7 +42,7 @@ const Home = () => {
             username: username.trim(),
             password: password.trim()
           })
-    
+
           if (res.data.sucess) {
             const tl = gsap.timeline()
             tl.to(".toaster", {
@@ -56,10 +56,10 @@ const Home = () => {
               duration: 0.9,
               scale: 1,
               ease: "power4.out",
-              onComplete:()=>{
-            
-                localStorage.setItem("AuthToken",res.data.token)
-                navigate("/chats",{replace:true})
+              onComplete: () => {
+
+                localStorage.setItem("AuthToken", res.data.token)
+                navigate("/chats", { replace: true })
 
               }
             })
@@ -84,14 +84,7 @@ const Home = () => {
 
   }
 
-  useEffect(() => {
-    gsap.to(".loader", {
-      rotate: 360,
-      duration: 2,
-      repeat: -1,
-      ease: "linear"
-    })
-  }, [loading])
+
 
 
 
@@ -109,9 +102,9 @@ const Home = () => {
 
           <button onClick={handleLogin} className=' sm:w-[580px] overflow-hidden flex justify-center items-center rounded-[10px] py-3 text-[18px] w-full bg-[#FFD700] text-[#0B0B0F] font-semibold ' >
             {loading ? (
-              <div className='loader' >
-                <DotsIcon />
-              </div>
+          
+                <span className="animate-spin w-[27px] h-[27px] border-3 border-black border-t-transparent rounded-full"></span>
+              
             ) : "Login account"}
           </button>
         </div>
