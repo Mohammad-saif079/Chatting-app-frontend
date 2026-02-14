@@ -547,7 +547,7 @@ const Chat = () => {
             if (data.message.sender_username === chatIdRef.current) {
                 setmessages(messages => [...messages, data.message]);
                 const clear = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/clearunread`, {
-                    userone: mainid.username,
+                    userone: data.message.receiver_username,
                     usertwo: data.message.sender_id,
                     token: localStorage.getItem("AuthToken")
                 })
