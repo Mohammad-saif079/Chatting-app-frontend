@@ -70,7 +70,6 @@ const Chat = () => {
         const objectUrl = URL.createObjectURL(selectedFile);
 
 
-        console.log(objectUrl)
 
         // save original only once
         if (!previewimg.current) {
@@ -353,7 +352,7 @@ const Chat = () => {
         // setremovepfp(true)
     }
 
-    console.log(canupdated)
+
     //handling user profile update
     const [updateLoad, setupdateLoad] = useState("Update")
     const updateprofilehandler = async () => {
@@ -526,7 +525,7 @@ const Chat = () => {
 
 
         socket.on("userStatus", async (data) => {
-            console.log("status change")
+        
             
             if (data.username === chatid && data.type === "connect") {
                 
@@ -552,6 +551,7 @@ const Chat = () => {
                     usertwo: data.message.sender_id,
                     token: localStorage.getItem("AuthToken")
                 })
+
 
             }
             else {
