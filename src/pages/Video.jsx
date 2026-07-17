@@ -6,7 +6,7 @@ import Draggable from "gsap/Draggable";
 gsap.registerPlugin(Draggable);
 
 //"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-export default function VideoPlayer({ source = "https://s01.nm-cdn30.top/files/81599029/720p/720p.m3u8?in=4614fb907e7e07d799579f7b02eabdf0::c90dcf2a07ae451c203134b1a1896c65::1764404623::ni" }) {
+export default function VideoPlayer({ source = "https://w47tz3ks-3000.inc1.devtunnels.ms/master.m3u8" }) {
     const videoRef = useRef(null);
     const containerRef = useRef(null);
     const rippleLeftRef = useRef(null);
@@ -132,7 +132,25 @@ export default function VideoPlayer({ source = "https://s01.nm-cdn30.top/files/8
             },
         })[0];
 
-        return () => draggable.kill();
+        const handleResize = () => {
+            const max = calcMax();
+
+            draggable.applyBounds({ minX: 0, maxX: max });
+
+            // reposition thumb according to saved progress
+            const newX = (progressRef.current / 100) * max;
+            gsap.set(progressbar.current, { x: newX });
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            draggable.kill();
+            window.removeEventListener("resize", handleResize);
+        };
+
+
+
     }, []);
 
     // UPDATE BAR ON TIMEUPDATE
