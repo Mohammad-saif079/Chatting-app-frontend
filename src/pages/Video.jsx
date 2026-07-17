@@ -5,13 +5,8 @@ import Draggable from "gsap/Draggable";
 
 gsap.registerPlugin(Draggable);
 
-<<<<<<< HEAD
-//"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-export default function VideoPlayer({ source = "https://w47tz3ks-3000.inc1.devtunnels.ms/master.m3u8" }) {
-=======
 // "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
 export default function VideoPlayer({ source = "https://pub-121058a7cc6940f3995ff9ad3d46489e.r2.dev/hls/master.m3u8" }) {
->>>>>>> 33a9115808b7a01c9f83ab2e98938a1269700d21
     const videoRef = useRef(null);
     const containerRef = useRef(null);
     const rippleLeftRef = useRef(null);
@@ -184,10 +179,6 @@ export default function VideoPlayer({ source = "https://pub-121058a7cc6940f3995f
             },
         })[0];
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 33a9115808b7a01c9f83ab2e98938a1269700d21
         const handleResize = () => {
             const max = calcMax();
 
@@ -206,10 +197,6 @@ export default function VideoPlayer({ source = "https://pub-121058a7cc6940f3995f
         };
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 33a9115808b7a01c9f83ab2e98938a1269700d21
     }, []);
 
     // UPDATE BAR ON TIMEUPDATE
